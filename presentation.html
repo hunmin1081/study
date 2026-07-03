@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Safety 건설안전 솔루션 프레젠테이션</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .presentation {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide {
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+      text-align: center;
+      position: absolute;
+      transition: opacity 0.5s ease-in-out;
+      animation: slideIn 0.5s ease-in-out;
+    }
+
+    .slide.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .slide.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Slide 1: Title */
+    .slide-1 {
+      background: linear-gradient(135deg, #14213D 0%, #1F2E4D 100%);
+      color: white;
+    }
+
+    .slide-1 h1 {
+      font-size: 4rem;
+      font-weight: 900;
+      margin-bottom: 30px;
+      line-height: 1.3;
+    }
+
+    .slide-1 p {
+      font-size: 1.5rem;
+      color: #FFB380;
+      font-weight: 500;
+    }
+
+    /* Slide 2: Problems */
+    .slide-2 {
+      background: #F5F7FA;
+      color: #14213D;
+    }
+
+    .slide-2 h2 {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 60px;
+      color: #14213D;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      max-width: 1200px;
+      margin-bottom: 40px;
+    }
+
+    .stat-item {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      border-left: 4px solid #FF8C42;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .stat-number {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: #FF8C42;
+      margin-bottom: 15px;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: bold;
+    }
+
+    .stat-description {
+      font-size: 0.95rem;
+      color: #666;
+      margin-top: 15px;
+      line-height: 1.6;
+    }
+
+    /* Slide 3-5: Solutions */
+    .slide-3, .slide-4, .slide-5 {
+      background: white;
+      color: #14213D;
+    }
+
+    .slide-3 h2, .slide-4 h2, .slide-5 h2 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 20px;
+      color: #14213D;
+    }
+
+    .solution-subtitle {
+      font-size: 1.3rem;
+      color: #FF8C42;
+      font-weight: 600;
+      margin-bottom: 50px;
+    }
+
+    .features {
+      font-size: 1.3rem;
+      color: #666;
+      line-height: 2;
+    }
+
+    .feature-item {
+      margin: 20px 0;
+      padding: 15px 20px;
+      background: #F5F7FA;
+      border-left: 4px solid #FF8C42;
+      border-radius: 8px;
+    }
+
+    /* Slide 6: Impact */
+    .slide-6 {
+      background: #14213D;
+      color: white;
+    }
+
+    .slide-6 h2 {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 60px;
+      color: white;
+    }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      max-width: 1000px;
+    }
+
+    .impact-item {
+      background: rgba(255, 140, 66, 0.1);
+      border: 2px solid #FF8C42;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: left;
+    }
+
+    .impact-item h4 {
+      font-size: 1.3rem;
+      color: #FFB380;
+      margin-bottom: 15px;
+    }
+
+    .impact-item p {
+      font-size: 0.95rem;
+      color: #DDD;
+      line-height: 1.6;
+    }
+
+    /* Slide 7: Contact */
+    .slide-7 {
+      background: linear-gradient(135deg, #14213D 0%, #0B1E3D 100%);
+      color: white;
+    }
+
+    .slide-7 h2 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 60px;
+    }
+
+    .contact-info {
+      font-size: 1.2rem;
+      color: #FFB380;
+      line-height: 2;
+    }
+
+    .contact-label {
+      color: #DDD;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Controls */
+    .controls {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      z-index: 100;
+    }
+
+    button {
+      background: #FF8C42;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      background: #FF7620;
+      transform: translateY(-2px);
+    }
+
+    .slide-counter {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      color: white;
+      font-size: 1.1rem;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px 20px;
+      border-radius: 6px;
+      z-index: 100;
+    }
+
+    .keyboard-hint {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      color: #999;
+      font-size: 0.9rem;
+      z-index: 100;
+    }
+
+    @media (max-width: 768px) {
+      .slide {
+        padding: 40px 20px;
+      }
+
+      .slide-1 h1 {
+        font-size: 2.5rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .impact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        bottom: 20px;
+        gap: 10px;
+      }
+
+      button {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="presentation">
+    <!-- Slide 1: Title -->
+    <div class="slide slide-1 active">
+      <h1>멀티모달 AI와 몰입형 AR·VR</h1>
+      <p>차세대 개인 맞춤형 건설안전 솔루션</p>
+    </div>
+
+    <!-- Slide 2: Problems -->
+    <div class="slide slide-2">
+      <h2>건설업 안전, 현재 상황은?</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">39.7%</div>
+          <div class="stat-label">전체 산업재해 사망자</div>
+          <div class="stat-description">2024년 827명 중 328명이 건설업 종사자</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">4배</div>
+          <div class="stat-label">높은 위험도</div>
+          <div class="stat-description">건설업 사고사망만인율(1.57) vs 평균(0.39)</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">3대</div>
+          <div class="stat-label">고위험 사고유형</div>
+          <div class="stat-description">추락/낙하, 충돌/협착, 전도/넘어짐</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: PART A -->
+    <div class="slide slide-3">
+      <h2>PART A: AI-CCTV</h2>
+      <div class="solution-subtitle">지능형 중앙관제</div>
+      <div class="features">
+        <div class="feature-item">✓ 멀티모달 AI가 실시간 위험 탐지</div>
+        <div class="feature-item">✓ 안전대책 이행 여부 자동 평가</div>
+        <div class="feature-item">✓ 중앙관제 시스템 구현</div>
+        <div class="feature-item">✓ 시각 전처리 및 객체 ID 통합</div>
+      </div>
+    </div>
+
+    <!-- Slide 4: PART B -->
+    <div class="slide slide-4">
+      <h2>PART B: AI-AR</h2>
+      <div class="solution-subtitle">현장 실시간 의사결정 지원</div>
+      <div class="features">
+        <div class="feature-item">✓ AR 글래스로 위험정보 시각화</div>
+        <div class="feature-item">✓ 안전관리자에게 조치대책 실시간 제공</div>
+        <div class="feature-item">✓ vSLAM 기반 디지털트윈 구축</div>
+        <div class="feature-item">✓ 음성 기반 안전 커뮤니케이션</div>
+      </div>
+    </div>
+
+    <!-- Slide 5: PART C -->
+    <div class="slide slide-5">
+      <h2>PART C: AI-IVR</h2>
+      <div class="solution-subtitle">데이터 기반 맞춤형 교육</div>
+      <div class="features">
+        <div class="feature-item">✓ 근로자 생체반응 분석으로 취약요인 파악</div>
+        <div class="feature-item">✓ 실사기반 VR 안전교육 제공</div>
+        <div class="feature-item">✓ 생성형 AI 기반 교육 콘텐츠</div>
+        <div class="feature-item">✓ VLM 맞춤형 학습 피드백</div>
+      </div>
+    </div>
+
+    <!-- Slide 6: Impact -->
+    <div class="slide slide-6">
+      <h2>기대효과</h2>
+      <div class="impact-grid">
+        <div class="impact-item">
+          <h4>✓ 실시간 위험 탐지</h4>
+          <p>AI-CCTV를 통해 건설현장의 위험 요소를 즉시 감지하고 사전 예방</p>
+        </div>
+        <div class="impact-item">
+          <h4>✓ 의사결정 지원</h4>
+          <p>AR 기술로 현장관리자의 신속한 의사결정 능력 향상</p>
+        </div>
+        <div class="impact-item">
+          <h4>✓ 안전 역량 강화</h4>
+          <p>AI-IVR 맞춤형 교육으로 근로자 안전 인식 및 대응능력 강화</p>
+        </div>
+        <div class="impact-item">
+          <h4>✓ 과학적 관리</h4>
+          <p>빅데이터 기반 안전관리 체계 구축으로 정량적 개선</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: Contact -->
+    <div class="slide slide-7">
+      <h2>문의</h2>
+      <div class="contact-info">
+        <div style="margin-bottom: 30px;">
+          <div class="contact-label">연구기관</div>
+          <div style="font-size: 1.5rem; color: white; margin-top: 10px;">[기관명]</div>
+        </div>
+        <div style="margin-bottom: 30px;">
+          <div class="contact-label">연구책임자</div>
+          <div style="font-size: 1.5rem; color: white; margin-top: 10px;">[연구책임자명]</div>
+        </div>
+        <div>
+          <div class="contact-label">이메일</div>
+          <div style="font-size: 1.5rem; color: white; margin-top: 10px;">contact@example.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-counter">
+    <span id="current">1</span> / <span id="total">7</span>
+  </div>
+
+  <div class="keyboard-hint">
+    ← → 화살표키 또는 버튼으로 이동
+  </div>
+
+  <div class="controls">
+    <button onclick="previousSlide()">← 이전</button>
+    <button onclick="nextSlide()">다음 →</button>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+
+    document.getElementById('total').textContent = totalSlides;
+
+    function showSlide(n) {
+      slides.forEach(slide => {
+        slide.classList.remove('active');
+        slide.classList.add('hidden');
+      });
+
+      slides[currentSlide].classList.add('active');
+      slides[currentSlide].classList.remove('hidden');
+
+      document.getElementById('current').textContent = currentSlide + 1;
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      showSlide(currentSlide);
+    }
+
+    function previousSlide() {
+      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+      showSlide(currentSlide);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') previousSlide();
+    });
+
+    showSlide(0);
+  </script>
+</body>
+</html>
